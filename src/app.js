@@ -9,12 +9,7 @@ const crypto = require('crypto');
     
     const server = Hapi.server({
         host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
-        port: 3000,
-        routes: {
-            cors: {
-                origin: ['http://submissionmlgc-pikatan-425210.uc.r.appspot.com/']
-            }
-        }
+        port: 3000
     });
 
 
