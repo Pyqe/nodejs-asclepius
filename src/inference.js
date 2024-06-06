@@ -1,7 +1,7 @@
 const tfjs = require('@tensorflow/tfjs-node');
 
 function loadModel() {
-    const modelUrl = "file://models/model.json";
+    const modelUrl = "gs://bucket-together/models/model.json";
     return tfjs.loadGraphModel(modelUrl);
 }
 
