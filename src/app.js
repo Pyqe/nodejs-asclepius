@@ -17,7 +17,16 @@ const crypto = require('crypto');
         },
     });
 
-
+    server.ext('onPreResponse', (request, h) => {
+        const response = request.response;
+        if (response.isBoom && response.output.statusCode === 413) {
+            return h.response({
+                "status": "fail",
+                "message": "Payload content length greater than maximum allowed: 1000000"
+             }).code(413);
+        }
+        return h.continue;
+    });
 
     server.route({
         method: 'POST',
@@ -25,14 +34,6 @@ const crypto = require('crypto');
         handler: async (request, h) => {
             try {
                 const { image } = request.payload;
-
-                const maxFileSize = 1000000;
-                if (image.length > maxFileSize) {
-                    return h.response({
-                        "status": "fail",
-                        "message": "Payload content length greater than maximum allowed: 1000000"
-                    }).code(413);
-                }
 
                 const predictions = await predict(model, image);
                 let verdict = "";
@@ -70,7 +71,7 @@ const crypto = require('crypto');
             payload: {
                 allow: 'multipart/form-data',
                 multipart: true,
-                maxBytes: 100000000
+                maxBytes: 1000000
             }
         }
     });
