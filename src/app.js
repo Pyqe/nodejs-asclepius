@@ -1,5 +1,7 @@
 const Hapi = require('@hapi/hapi');
 const { loadModel, predict } = require('./inference');
+const { storeData } = require('./store-data.js');
+const crypto = require('crypto');
 
 (async () => {
     const model = await loadModel();
@@ -33,17 +35,23 @@ const { loadModel, predict } = require('./inference');
                     verdict = "Non-cancer";
                 }
 
+                id = crypto.randomUUID();
+                predictData = {
+                    "id": id,
+                    "result": verdict,
+                    "suggestion": "Hati-hati!",
+                    "createdAt": new Date()
+                };
+                await storeData(id, predictData);
+
                 return h.response({
                     "status": "success",
                     "message": "Model is predicted successfully",
-                    "data": {
-                        "id": "77bd90fc-c126-4ceb-828d-f048dddff746",
-                        "result": verdict,
-                        "suggestion": "Hati-hati!",
-                        "createdAt": "2023-12-22T08:26:41.834Z"
-                    }
+                    "data": predictData
                 }).code(201);
-            } catch {
+            } catch (err) {
+                console.log(err);
+
                 return h.response({
                     "status": "fail",
                     "message": "Terjadi kesalahan dalam melakukan prediksi"
