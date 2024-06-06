@@ -9,7 +9,7 @@ const crypto = require('crypto');
     
     const server = Hapi.server({
         host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
-        port: 8000
+        port: 3000
     });
 
     server.route({
