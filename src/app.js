@@ -11,8 +11,10 @@ const crypto = require('crypto');
         host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
         port: 3000,
         routes: {
-            cors: false
-        }
+            cors: {
+              origin: ['*'],
+            },
+        },
     });
 
 
