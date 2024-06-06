@@ -2,7 +2,6 @@ const Hapi = require('@hapi/hapi');
 const { loadModel, predict } = require('./inference');
 const { storeData } = require('./store-data.js');
 const crypto = require('crypto');
-const fs = require('fs');
 
 (async () => {
     const model = await loadModel();
@@ -10,11 +9,7 @@ const fs = require('fs');
     
     const server = Hapi.server({
         host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
-        port: 8000,
-        tls: {
-            key: fs.readFileSync('server.key'),
-            cert: fs.readFileSync('server.cert')
-        }
+        port: 8000
     });
 
     server.route({
